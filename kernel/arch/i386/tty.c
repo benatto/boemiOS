@@ -33,7 +33,7 @@ void tty_init(void) {
 	}
 }
  
-void terminal_setcolor(uint8_t color) {
+void tty_setcolor(uint8_t color) {
 	terminal_color = color;
 }
  

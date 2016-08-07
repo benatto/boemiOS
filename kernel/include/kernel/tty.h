@@ -2,7 +2,8 @@
 #define __H_TTY_H__
 
 #include <stddef.h>
-
+#include <stdint.h>
+#include <stdbool.h>
 #define TABCOUNT 1 << 2
 
 enum special_char {
@@ -16,5 +17,6 @@ void tty_init(void);
 void print_char(char c);
 void tty_writestring(const char *c);
 void tty_write(const char *c, size_t data);
+void tty_setcolor(uint8_t color);
 
 #endif

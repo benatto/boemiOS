@@ -19,7 +19,7 @@ LDFLAGS:=$(LDFLAGS)
 LIBS:=$(LIBS) -nostdlib -lgcc
  
 #ARCHDIR:=arch/$(HOSTARCH)
-ARCHDIR:=arch/i386/
+ARCHDIR:=arch/i386
  
 include $(ARCHDIR)/make.config
  
@@ -43,20 +43,20 @@ $(OBJS) \
 $(CRTN_OBJ) \
  
 OBJ_LINK_LIST:=\
-#$(CRTI_OBJ) \
+$(CRTI_OBJ) \
 $(CRTBEGIN_OBJ) \
 $(OBJS) \
 $(CRTEND_OBJ) \
 $(CRTN_OBJ) \
  
-OBJ_LINK_LIST:=\
-$(OBJS) \
+#OBJ_LINK_LIST:=\
+#$(OBJS) \
  
-all: os.kernel
+all: boemios.kernel
  
 .PHONY: all clean install install-headers install-kernel
  
-os.kernel: $(OBJ_LINK_LIST) $(ARCHDIR)/linker.ld
+boemios.kernel: $(OBJ_LINK_LIST) $(ARCHDIR)/linker.ld
 	$(CC) -T $(ARCHDIR)/linker.ld -o $@ $(CFLAGS) $(OBJ_LINK_LIST) $(LDFLAGS) $(LIBS)
  
 %.o: %.c
@@ -67,6 +67,9 @@ os.kernel: $(OBJ_LINK_LIST) $(ARCHDIR)/linker.ld
  
 clean:
 	rm -f boemios.kernel $(OBJS) $(ALL_OUR_OBJS) *.o */*.o */*/*.o
+
+test-kernel: boemios.kernel
+	qemu-system-i386 -kernel boemios.kernel
  
 install: install-headers install-kernel
  
