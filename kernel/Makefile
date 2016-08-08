@@ -5,6 +5,7 @@ CFLAGS?=-O2 -g
 CPPFLAGS?=
 LDFLAGS?=
 LIBS?=
+LIBDIR?=$(PREFIX)/lib
  
 DESTDIR?=
 PREFIX?=/usr/local
@@ -13,10 +14,11 @@ BOOTDIR?=$(EXEC_PREFIX)/boot
 INCLUDEDIR?=$(PREFIX)/include
  
 CFLAGS:=$(CFLAGS) -ffreestanding -fbuiltin -Wall -Wextra
-CPPFLAGS:=$(CPPFLAGS) -D__is_boemios_kernel -Iinclude
+CPPFLAGS:=$(CPPFLAGS) -D__is_boemios_kernel -I$(INCLUDEDIR)
 LDFLAGS:=$(LDFLAGS)
-#LIBS:=$(LIBS) -nostdlib -lk -lgcc
-LIBS:=$(LIBS) -nostdlib -lgcc
+LIBS:=$(LIBS) -L$(LIBDIR)
+LIBS:=$(LIBS) -nostdlib -lk -lgcc
+#LIBS:=$(LIBS) -nostdlib -lgcc
  
 #ARCHDIR:=arch/$(HOSTARCH)
 ARCHDIR:=arch/i386
