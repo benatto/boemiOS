@@ -11,9 +11,9 @@ static void itoa(char *buf, int base, int d) {
 
     /* If %d is specified and D is minus, put `-' in the head. */
     if (base == 'd' && d < 0) {
-        *p++ = '-';
-        buf++;
-        ud = -d;
+      *p++ = '-';
+      buf++;
+      ud = -d;
 	} else if (base == 'x') {
       divisor = 16;
 	}
@@ -85,7 +85,8 @@ int printf(const char *restrict format, ...) {
 			format++;
 			const char *s = va_arg(parameters, const char*);
 			print(s, strlen(s));
-		} else if (*format == 'd' || *format == 'x') {
+		} else if (*format == 'd' || *format == 'x'
+				|| *format == 'u' || *format == 'l') {
 			/*TODO: When we have malloc use it here*/
 			char buf[16];
 			itoa(buf, *format, va_arg(parameters, int));
