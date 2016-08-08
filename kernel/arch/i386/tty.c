@@ -25,6 +25,12 @@ void tty_init(void) {
 		}
 	}
 }
+
+void tty_clear(void) {
+	memset(terminal_buffer, 0, VGA_HEIGHT * VGA_WIDTH);
+	terminal_row = terminal_column = 0;
+	tty_setcolor(DEFAULT_TTY_COLOR);
+}
  
 void tty_setcolor(uint8_t color) {
 	terminal_color = color;

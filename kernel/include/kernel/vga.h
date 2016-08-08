@@ -2,7 +2,9 @@
 #define _KERNEL_VGA_H
  
 #include <stdint.h>
- 
+
+#define DEFAULT_TTY_COLOR COLOR_LIGHT_GREY
+
 enum vga_color
 {
 	COLOR_BLACK = 0,

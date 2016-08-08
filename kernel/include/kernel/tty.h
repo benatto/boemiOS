@@ -18,5 +18,6 @@ void print_char(char c);
 void tty_writestring(const char *c);
 void tty_write(const char *c, size_t data);
 void tty_setcolor(uint8_t color);
+void tty_clear(void);
 
 #endif

@@ -11,10 +11,6 @@ void kernel_early(void) {
 }
  
 void kernel_main(void) {
-	/*tty_setcolor(COLOR_GREEN);
-	tty_writestring("Welcome to BoemiOS!\n");
-	tty_setcolor(COLOR_MAGENTA);
-	tty_writestring("Initializing...\n");*/
 	tty_setcolor(COLOR_GREEN);
 	printf("Welcome to BoemiOS\n");
 	tty_setcolor(COLOR_MAGENTA);
