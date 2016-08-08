@@ -46,11 +46,11 @@ $(CRTN_OBJ) \
  
 OBJ_LINK_LIST:=\
 $(CRTI_OBJ) \
-$(CRTBEGIN_OBJ) \
 $(OBJS) \
-$(CRTEND_OBJ) \
 $(CRTN_OBJ) \
  
+#$(CRTEND_OBJ) \
+#$(CRTBEGIN_OBJ) \
 #OBJ_LINK_LIST:=\
 #$(OBJS) \
  
