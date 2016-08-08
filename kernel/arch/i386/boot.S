@@ -64,6 +64,13 @@ _start:
 	# C++ features such as global constructors and exceptions will require
 	# runtime support to work as well.
 
+	# Push multiboot at %ebx to stack
+	pushl $0
+	popf
+
+	pushl %ebx
+	# Push multiboot magicnumber to stack
+	pushl %eax
 	#call kernel early setup to start tty
 	call kernel_early
 
@@ -73,6 +80,7 @@ _start:
 	# aligned above and we've since pushed a multiple of 16 bytes to the
 	# stack since (pushed 0 bytes so far) and the alignment is thus
 	# preserved and the call is well defined.
+
 	call kernel_main
 
 	# If the system has nothing more to do, put the computer into an
