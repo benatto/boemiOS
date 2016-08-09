@@ -14,6 +14,26 @@
 #error "Architecture not supported"
 #endif
 
+typedef unsigned long addr_t;
+
+struct memmap_entry {
+	addr_t addr;
+	uint32_t length;
+	uint32_t type;
+	uint32_t size;
+};
+
+typedef struct memmap_entry map_entry;
+
+struct memmap {
+	uint32_t size;
+	map_entry mmap[MAXMEM];
+};
+
+typedef struct memmap memmap;
+
+memmap mem_map;
+
 typedef struct page {
 	
 }page_t;
