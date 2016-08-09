@@ -11,10 +11,12 @@
 #include <boot/multiboot.h>
 
 #include <memory/memory.h>
+#include <memory/memtypes.h>
 
 #define CHECK_FLAG(flags,bit)   ((flags) & (1 << (bit)))
 
 extern void enable_paging(void);
+extern void write_cr3(addr_t val);
 
 static void __show_welcome() {
 	tty_setcolor(COLOR_GREEN);
@@ -72,7 +74,7 @@ void kernel_main(void) {
 
 
 	printf("Loading page table...");
-	write_cr3(pgd);
+	write_cr3((addr_t)pgd);
 	printf("[");
 	tcolor = tty_getcolor();
 	tty_setcolor(COLOR_GREEN);
