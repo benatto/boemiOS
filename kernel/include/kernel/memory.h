@@ -3,6 +3,8 @@
 
 #include <boot/multiboot.h>
 
-int meminit(multiboot_info_t*);
+typedef uint32_t pgd_t;
 
+int meminit(multiboot_info_t*);
+pgd_t *fill_pgtable(void);
 #endif

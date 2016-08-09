@@ -10,7 +10,11 @@
 
 #include <boot/multiboot.h>
 
+#include <memory/memory.h>
+
 #define CHECK_FLAG(flags,bit)   ((flags) & (1 << (bit)))
+
+extern void enable_paging(void);
 
 static void __show_welcome() {
 	tty_setcolor(COLOR_GREEN);
@@ -50,6 +54,41 @@ void kernel_early(unsigned long magic, unsigned long addr) {
 }
 
 void kernel_main(void) {
+	uint8_t tcolor;
+	pgd_t *pgd;
+
+	tty_setcolor(COLOR_LIGHT_GREY);
+
+	printf("Filling initial page table...");
+	pgd = fill_pgtable();
+	printf("[");
+	tcolor = tty_getcolor();
+	tty_setcolor(COLOR_GREEN);
+	printf("OK");
+	tty_setcolor(tcolor);
+	printf("]\n");
+
+	ABORT_ON(!pgd);
+
+
+	printf("Loading page table...");
+	write_cr3(pgd);
+	printf("[");
+	tcolor = tty_getcolor();
+	tty_setcolor(COLOR_GREEN);
+	printf("OK");
+	tty_setcolor(tcolor);
+	printf("]\n");
+	
+	printf("Enabling paging...");
+	enable_paging();
+	printf("[");
+	tcolor = tty_getcolor();
+	tty_setcolor(COLOR_GREEN);
+	printf("OK");
+	tty_setcolor(tcolor);
+	printf("]\n");
+
 	tty_setcolor(COLOR_MAGENTA);
 	printf("Done.\n");
 }
