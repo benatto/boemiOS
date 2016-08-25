@@ -11,18 +11,18 @@
 #include <memory/memtypes.h>
 
 static inline void _print_memmap(void) {
-	uint32_t i, size;
+	uint32_t i, len;
 	addr_t start_addr;
 
 	for (i = 0; i < mem_map.size; i++) {
-		size = mem_map.mmap[i].size;
+		len = mem_map.mmap[i].length;
 		start_addr = mem_map.mmap[i].addr;
 
-		printf("\t[0x%x-0x%x]...%u [size: %u]\n",
+		printf("\t[0x%x-0x%x]...%u [size(B): %u]\n",
 							(unsigned) start_addr,
-							(unsigned) (start_addr + size),
+							(unsigned) (start_addr + len),
 							(unsigned) mem_map.mmap[i].type,
-							(unsigned) size);
+							(unsigned) len);
 	}
 }
 
