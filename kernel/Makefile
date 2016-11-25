@@ -79,6 +79,6 @@ install-headers:
 	mkdir -p $(DESTDIR)$(INCLUDEDIR)
 	cp -RTv include $(DESTDIR)$(INCLUDEDIR)
  
-install-kernel: myos.kernel
+install-kernel: boemios.kernel
 	mkdir -p $(DESTDIR)$(BOOTDIR)
-	cp myos.kernel $(DESTDIR)$(BOOTDIR)
+	cp boemios.kernel $(DESTDIR)$(BOOTDIR)
