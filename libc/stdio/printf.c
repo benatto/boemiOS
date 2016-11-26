@@ -89,7 +89,6 @@ int printf(const char *restrict format, ...) {
 				|| *format == 'u' || *format == 'l') {
 			/*TODO: When we have malloc use it here*/
 			char buf[16];
-			format++;
 			itoa(buf, *format, va_arg(parameters, int));
 			printf(buf, strlen(buf));
 		} else {
