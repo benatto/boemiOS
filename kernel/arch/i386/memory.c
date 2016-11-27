@@ -6,6 +6,7 @@
 #include <kernel/memory.h>
 #include <kernel/asm.h>
 #include <kernel/tty.h>
+#include <kernel/pagealloc.h>
 
 #include <memory/memory.h>
 
@@ -69,6 +70,7 @@ int meminit(multiboot_info_t *mbi) {
 	printf("\tmbi mem_upper: %uKB\n", mbi->mem_upper);
 
 	i = 0;
+	zone_nr = 0;
 
 	/* We store the zone info right after the kernel ends in memory.
 	 * We used this place holder as at this point we don't have a page frame
@@ -91,9 +93,10 @@ int meminit(multiboot_info_t *mbi) {
 		zone->zone_status = mmap->type;
 		zone->nr_pages = zone->zone_len/PAGE_SIZE;
 		zone->free_pages = zone->nr_pages;
+		zone->free_page = 0;
 
 
-		printf("Zone [0x%x-0x%x] %lu (B), %lu pages, status: %s\n",
+		printf("Zone[0x%x-0x%x] %lu (B), %lu pages, status: %s\n",
 				(unsigned int)zone->start_addr, (unsigned int)zone->end_addr,
 				 zone->zone_len, zone->nr_pages,
 				zone->zone_status == ZONE_AVAILABLE ? "FREE" : "RESERVED");
@@ -102,12 +105,25 @@ int meminit(multiboot_info_t *mbi) {
 			zone->zone_bitmap[j] = 0;
 
 		zone = zone + sizeof(mem_zone_t);
+		zone_nr++;
 		i++;
 	}
 
 	mem_map.size = i;
 
 	printf("End of memory map\n");
+
+	/*void *p = get_page(200*PAGE_SIZE);
+
+	ABORT_ON(!p);
+
+	printf("Got start page: 0x%x\n", (unsigned int)p);
+
+	p = get_page(200*PAGE_SIZE);
+
+	ABORT_ON(!p);
+
+	printf("Got start page: 0x%x\n", (unsigned int)p);*/
 
 	return 0;
 }
