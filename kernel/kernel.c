@@ -11,7 +11,6 @@
 #include <boot/multiboot.h>
 
 #include <memory/memory.h>
-#include <memory/memtypes.h>
 
 #define CHECK_FLAG(flags,bit)   ((flags) & (1 << (bit)))
 
