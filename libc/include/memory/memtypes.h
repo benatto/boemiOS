@@ -4,7 +4,8 @@
 #include <kernel/asm.h>
 
 #define PAGE_SHIFT 12
-#define PAGE_SIZE 1UL << PAGE_SHIFT
+#define PAGE_SIZE (1 << PAGE_SHIFT)
+#define PAGE_MASK (~(PAGE_SIZE-1))
 
 
 /*Number of bits on physical addr*/
@@ -14,6 +15,9 @@
 #define MAXMEM 2^PADDR_SIZE
 #define PGD_ENTRIES 1024
 #define SWAPPER_FLAGS 0x00000002
+
+#define PAGE_ALIGN(addr) (((addr)+PAGE_SIZE-1) & PAGE_MASK)
+
 #else
 #error "Architecture not supported"
 #endif
