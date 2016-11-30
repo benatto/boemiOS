@@ -85,20 +85,6 @@ int meminit(multiboot_info_t *mbi) {
 
 	printf("End of memory map\n");
 
-	void *p = get_page(PAGE_SIZE);
-
-	ABORT_ON(!p);
-
-	printf("Got start page: 0x%x\n", (unsigned int)p);
-
-	/*p = get_page(PAGE_SIZE);
-
-	ABORT_ON(!p);
-
-	printf("Got start page: 0x%x\n", (unsigned int)p);*/
-
-	free_page_range(p, PAGE_SIZE);
-
 	return 0;
 }
 
