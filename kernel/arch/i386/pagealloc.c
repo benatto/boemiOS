@@ -5,6 +5,41 @@
 #include <kernel/pagealloc.h>
 #include <kernel/memory.h>
 
+void free_page(void *p) {
+	unsigned int addr, i, offset;
+	mem_zone_t *zone;
+
+	offset = 0;
+	addr = (unsigned int)p;
+	zone = (mem_zone_t*)&endkernel + sizeof(mem_zone_t);
+
+	for (i = 0; i < zone_nr; i++, zone = zone + sizeof(mem_zone_t)) {
+		if (addr >= zone->start_addr && addr < zone->end_addr)
+			goto found_zone;
+	}
+
+	printf("Invalid memory operation at: 0x%x\n", addr);
+	abort();
+
+found_zone:
+	offset = (addr - zone->start_addr)/PAGE_SIZE;
+	zone->zone_bitmap[offset] = 0;
+	zone->free_pages++;
+	ABORT_ON(zone->free_pages > zone->nr_pages);
+}
+
+void free_page_range(void *start, unsigned long len) {
+	unsigned int i, nr_pages;
+	void *p;
+
+	p = start;
+
+	nr_pages = len/PAGE_SIZE;
+
+	for (i = 0; i < nr_pages; i++, p = p + PAGE_SIZE) {
+		free_page(p);
+	}
+}
 
 void *get_page(unsigned long size) {
 	short found;
@@ -14,10 +49,7 @@ void *get_page(unsigned long size) {
 	found = 1;
 	nr_pages = size/PAGE_SIZE;
 
-	printf("Will allocate %u pages\n", nr_pages);
-
-	zone = (mem_zone_t*)&endkernel;
-	printf("First zone at: 0x%x\n", (unsigned int)zone);
+	zone = (mem_zone_t*)&endkernel + sizeof(mem_zone_t);
 
 	i = 0;
 	while (i < zone_nr) {

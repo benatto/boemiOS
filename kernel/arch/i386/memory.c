@@ -27,34 +27,6 @@ static inline void _print_memmap(void) {
 }
 
 
-
-/* Allocate size/page_size pages from physical memory
- * the memory will be allocated directly aftwards endkernel.
- * This should be used wisely and just on system's bootstrap
-static void *alloc_phys(unsigned int size) {
-	static uint32_t last_addr = 0;
-	void *base;
-	unsigned long nr_pages;
-
-	nr_pages = 0;
-
-	if (last_addr == 0) {
-		last_addr = (uint32_t)&endkernel;
-	}
-
-	last_addr = (last_addr + (PAGE_SIZE)-1) & ~((PAGE_SIZE)-1);
-
-	base = (void*)last_addr;
-
-	nr_pages = size/PAGE_SIZE;
-
-	nr_pages = size <= PAGE_SIZE ? 1 : size/PAGE_SIZE;
-
-	last_addr += nr_pages * PAGE_SIZE;
-
-	return base;
-}*/
-
 int meminit(multiboot_info_t *mbi) {
 	unsigned int i, j;
 	unsigned long zone_len;
@@ -113,17 +85,19 @@ int meminit(multiboot_info_t *mbi) {
 
 	printf("End of memory map\n");
 
-	/*void *p = get_page(200*PAGE_SIZE);
+	void *p = get_page(PAGE_SIZE);
 
 	ABORT_ON(!p);
 
 	printf("Got start page: 0x%x\n", (unsigned int)p);
 
-	p = get_page(200*PAGE_SIZE);
+	/*p = get_page(PAGE_SIZE);
 
 	ABORT_ON(!p);
 
 	printf("Got start page: 0x%x\n", (unsigned int)p);*/
+
+	free_page_range(p, PAGE_SIZE);
 
 	return 0;
 }
