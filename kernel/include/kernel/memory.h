@@ -13,6 +13,7 @@ typedef uint32_t pgd_t;
  * the kernel ends. It has no usefull value itself,
  * what we're interest is where it's stored at memory.*/
 extern unsigned int endkernel;
+unsigned int zone_nr;
 
 enum memzone_status {
 	ZONE_AVAILABLE = 1,
@@ -23,6 +24,7 @@ enum memzone_status {
 /* This used to setup the page frame allocator
  * We keep these page aligned*/
 typedef struct mem_zone {
+	int free_page;
 	addr_t start_addr;
 	addr_t end_addr;
 	unsigned long nr_pages;

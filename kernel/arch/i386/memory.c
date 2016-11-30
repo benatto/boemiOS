@@ -6,6 +6,7 @@
 #include <kernel/memory.h>
 #include <kernel/asm.h>
 #include <kernel/tty.h>
+#include <kernel/pagealloc.h>
 
 #include <memory/memory.h>
 
@@ -26,34 +27,6 @@ static inline void _print_memmap(void) {
 }
 
 
-
-/* Allocate size/page_size pages from physical memory
- * the memory will be allocated directly aftwards endkernel.
- * This should be used wisely and just on system's bootstrap
-static void *alloc_phys(unsigned int size) {
-	static uint32_t last_addr = 0;
-	void *base;
-	unsigned long nr_pages;
-
-	nr_pages = 0;
-
-	if (last_addr == 0) {
-		last_addr = (uint32_t)&endkernel;
-	}
-
-	last_addr = (last_addr + (PAGE_SIZE)-1) & ~((PAGE_SIZE)-1);
-
-	base = (void*)last_addr;
-
-	nr_pages = size/PAGE_SIZE;
-
-	nr_pages = size <= PAGE_SIZE ? 1 : size/PAGE_SIZE;
-
-	last_addr += nr_pages * PAGE_SIZE;
-
-	return base;
-}*/
-
 int meminit(multiboot_info_t *mbi) {
 	unsigned int i, j;
 	unsigned long zone_len;
@@ -69,6 +42,7 @@ int meminit(multiboot_info_t *mbi) {
 	printf("\tmbi mem_upper: %uKB\n", mbi->mem_upper);
 
 	i = 0;
+	zone_nr = 0;
 
 	/* We store the zone info right after the kernel ends in memory.
 	 * We used this place holder as at this point we don't have a page frame
@@ -91,9 +65,10 @@ int meminit(multiboot_info_t *mbi) {
 		zone->zone_status = mmap->type;
 		zone->nr_pages = zone->zone_len/PAGE_SIZE;
 		zone->free_pages = zone->nr_pages;
+		zone->free_page = 0;
 
 
-		printf("Zone [0x%x-0x%x] %lu (B), %lu pages, status: %s\n",
+		printf("Zone[0x%x-0x%x] %lu (B), %lu pages, status: %s\n",
 				(unsigned int)zone->start_addr, (unsigned int)zone->end_addr,
 				 zone->zone_len, zone->nr_pages,
 				zone->zone_status == ZONE_AVAILABLE ? "FREE" : "RESERVED");
@@ -102,12 +77,27 @@ int meminit(multiboot_info_t *mbi) {
 			zone->zone_bitmap[j] = 0;
 
 		zone = zone + sizeof(mem_zone_t);
+		zone_nr++;
 		i++;
 	}
 
 	mem_map.size = i;
 
 	printf("End of memory map\n");
+
+	void *p = get_page(PAGE_SIZE);
+
+	ABORT_ON(!p);
+
+	printf("Got start page: 0x%x\n", (unsigned int)p);
+
+	/*p = get_page(PAGE_SIZE);
+
+	ABORT_ON(!p);
+
+	printf("Got start page: 0x%x\n", (unsigned int)p);*/
+
+	free_page_range(p, PAGE_SIZE);
 
 	return 0;
 }
