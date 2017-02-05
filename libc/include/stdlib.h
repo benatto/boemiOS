@@ -10,7 +10,7 @@
 __attribute__((__noreturn__))
 void abort(void);
 #else
-void abort(void) { do{}while(0); }
+void abort(void) { do{}while(1); }
  
 #endif
 #endif
