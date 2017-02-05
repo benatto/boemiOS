@@ -51,10 +51,10 @@ typedef struct malloc_data {
 }malloc_data_t;
 
 typedef struct malloc_page {
-	/* Base addr */
-	void *addr;
 	/* Keep this struct linked on page list */
 	list_head *list;
+	/* Base addr */
+	void *addr;
 }malloc_page_t;
 
 

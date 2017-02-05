@@ -39,6 +39,8 @@ void *mem_cache_create(char *name, size_t len) {
 }
 
 static int malloc_init() {
+	list_head *pages;
+	malloc_page_t *mpage;
 	/* We start with just one page */
 	mdata.current_page = get_page(PAGE_SIZE);
 
@@ -50,6 +52,11 @@ static int malloc_init() {
 		return -1;
 	}
 
+
+	pages = &(mdata.pages);
+
+	INIT_LIST(pages);
+
 	set_bit(&mdata.flags, MALLOC_INITIALIZED);
 	set_bit(&mdata.flags, MALLOC_VALID);
 	set_bit(&mdata.flags, MALLOC_HAS_SPACE);
@@ -57,7 +64,20 @@ static int malloc_init() {
 	mdata.num_pages++;
 	mdata.offset = sizeof(malloc_data_t);
 
-	/* TODO: init page lists here */
+	/*We store the page list data inside the new allocated page
+	 *right after malloc metadata */
+	mpage = (malloc_page_t*)mdata.current_page + mdata.offset;
+	mdata.offset += sizeof(malloc_page_t);
+
+	mpage->list = (list_head*)mdata.current_page + mdata.offset;
+
+	mdata.offset += sizeof(list_head);
+
+	INIT_LIST(mpage->list);
+	mpage->addr = mdata.current_page;
+
+	list_insert_tail(&mdata.pages, mpage->list);
+
 	return 0;
 }
 
