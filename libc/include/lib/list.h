@@ -26,8 +26,10 @@ inline void list_insert_tail(list_head *head, list_head *item) {
 
 	last = head;
 
-	list_foreach(head, i) {
-		last = i;
+	if (last->next != head) {
+		list_foreach(head, i) {
+			last = i;
+		}
 	}
 
 	list_insert_after(last, item);
