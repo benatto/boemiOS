@@ -8,20 +8,23 @@ typedef struct list_head {
 
 
 #define INIT_LIST(l) { \
-	h->next = h->prev = NULL; \
+	l->next = l; \
+	l->prev = l; \
 }
 
-#define list_insert_after(head, item) { \
-	head->next = item; \
-	item->prev = head; \
+inline void list_insert_after(list_head *head, list_head *item) {
+	head->next = item;
+	item->prev = head;
 }
 
 #define list_foreach(head, l)  \
-	for (l = head->next; l != NULL; l = l->next) \
+	for (l = head->next; l != head; l = l->next) \
 
 
 inline void list_insert_tail(list_head *head, list_head *item) {
 	list_head *i, *last;
+
+	last = head;
 
 	list_foreach(head, i) {
 		last = i;
