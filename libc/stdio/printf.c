@@ -90,7 +90,7 @@ int printf(const char *restrict format, ...) {
 			/*TODO: When we have malloc use it here*/
 			char buf[16];
 			itoa(buf, *format, va_arg(parameters, int));
-			printf(buf, strlen(buf));
+			print(buf, strlen(buf));
 		} else {
 			goto incomprehensible_conversion;
 		}
