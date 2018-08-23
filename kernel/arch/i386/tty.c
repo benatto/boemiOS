@@ -50,12 +50,19 @@ void print_char(char c) {
 
 	sc = (enum special_char)c;
 
+
+	/*
+	 * We always return if special char to avoid print odd
+	 * stuff on screen
+	 */
 	switch(sc) {
 		case CHAR_TAB:
 			terminal_column += TABCOUNT;
 			return;
-		case CHAR_NEWLINE: /*\n increments line and do a CHAR_RETURN*/
+		case CHAR_NEWLINE:
 			terminal_row++;
+			terminal_column = 0;
+			return;
 		case CHAR_RETURN:
 			terminal_column = 0;
 			return;
@@ -75,7 +82,7 @@ void print_char(char c) {
 		}
 	}
 }
- 
+
 void tty_write(const char *data, size_t size) {
 	for ( size_t i = 0; i < size; i++ )
 		print_char(data[i]);
