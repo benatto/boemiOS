@@ -7,7 +7,7 @@ LDFLAGS?=
 LIBS?=
  
 DESTDIR?=
-PREFIX?=/usr/local
+PREFIX?=/usr/local/boemiOS
 EXEC_PREFIX?=$(PREFIX)
 INCLUDEDIR?=$(PREFIX)/include
 LIBDIR?=$(EXEC_PREFIX)/lib

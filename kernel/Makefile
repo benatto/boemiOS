@@ -8,7 +8,7 @@ LIBS?=
 LIBDIR?=$(PREFIX)/lib
  
 DESTDIR?=
-PREFIX?=/usr/local
+PREFIX?=/usr/local/boemiOS
 EXEC_PREFIX?=$(PREFIX)
 BOOTDIR?=$(EXEC_PREFIX)/boot
 INCLUDEDIR?=$(PREFIX)/include
