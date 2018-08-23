@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
+static void print(const char *data, size_t data_length);
 
 static void itoa(char *buf, int base, int d) {
 	char *p = buf;
@@ -31,8 +32,10 @@ static void itoa(char *buf, int base, int d) {
     /* Reverse BUF. */
     p1 = buf;
     p2 = p - 1;
-    while (p1 < p2) {
+
+	while (p1 < p2) {
         char tmp = *p1;
+
         *p1 = *p2;
         *p2 = tmp;
         p1++;
@@ -90,6 +93,16 @@ int printf(const char *restrict format, ...) {
 			/*TODO: When we have malloc use it here*/
 			char buf[16];
 			itoa(buf, *format, va_arg(parameters, int));
+
+			/* We skip next char as it'd be the format modifier, this avoids
+			 * to print the format as suffix (i.e.: 0x10x)
+			 * TODO: We need to support advanced types like %lu, %llx, etc.
+			 * Currently a construction like:
+			 * 			printf("0xllx\n", 10)
+			 * end up like:
+			 * 			0x10lx
+			 */
+			format++;
 			print(buf, strlen(buf));
 		} else {
 			goto incomprehensible_conversion;
